@@ -80,9 +80,24 @@ You'll get 3 code blocks to copy.
 
 Find the `initGradients()` function and add:
 
+**Template:**
+```glsl
+registerGradient(0xTRIGGER, 0xCOLOR1, 0xCOLOR2, 0xCOLOR3, 1000.0, 45.0);
+```
+
+**✅ Correct Example:**
 ```glsl
 registerGradient(0x7B32A8, 0x70D352, 0xDFF3E0, 1000.0, 45.0);
 ```
+
+**❌ Wrong Examples:**
+```glsl
+registerGradient(0x7b32a8, 0x70d352, 0xdff3e0, 1000.0, 45.0);  // Lowercase hex
+registerGradient(0x7B32A8, 0x70D352, 0xDFF3E0, 500.0, 90.0);   // Wrong speed/angle
+registerGradient(0x7B32A8, 0x70D352, 0xDFF3E0);                // Missing speed/angle
+```
+
+---
 
 ### Step 3: Add to Text Config
 
@@ -90,6 +105,15 @@ registerGradient(0x7B32A8, 0x70D352, 0xDFF3E0, 1000.0, 45.0);
 
 Find the switch statement and add:
 
+**Template:**
+```glsl
+TEXT_EFFECT(R, G, B) { // #HEXCOLOR
+    apply_gradient_3(rgb(R1, G1, B1), rgb(R2, G2, B2), rgb(R3, G3, B3), 1.0);
+    textData.shouldScale = true;
+}
+```
+
+**✅ Correct Example:**
 ```glsl
 TEXT_EFFECT(123, 50, 168) { // #7B32A8
     apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
@@ -97,12 +121,45 @@ TEXT_EFFECT(123, 50, 168) { // #7B32A8
 }
 ```
 
+**❌ Wrong Examples:**
+```glsl
+TEXT_EFFECT(123.5, 50, 168) { // Decimal RGB values (must be integers)
+    apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
+    textData.shouldScale = true;
+}
+
+TEXT_EFFECT(123, 50, 168) { // #7B32A8
+    apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 0.5); // Wrong speed
+    textData.shouldScale = true;
+}
+
+TEXT_EFFECT(123, 50, 168) { // #7B32A8
+    apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
+    // Missing textData.shouldScale = true;
+}
+```
+
+---
+
 ### Step 4: Add to Fragment Shader
 
 **File:** `core/rendertype_text.fsh`
 
 Find the if-else chain and add:
 
+**Template:**
+```glsl
+} else if(iColor == ivec3(R, G, B)) {
+    grad.colors[0] = hexToRgb(0xCOLOR1);
+    grad.colors[1] = hexToRgb(0xCOLOR2);
+    grad.colors[2] = hexToRgb(0xCOLOR3);
+    grad.colorCount = 3;
+    grad.speed = 1000.0;
+    grad.angle = 45.0;
+    foundGradient = true;
+```
+
+**✅ Correct Example:**
 ```glsl
 } else if(iColor == ivec3(123, 50, 168)) {
     grad.colors[0] = hexToRgb(0x70D352);
@@ -113,6 +170,67 @@ Find the if-else chain and add:
     grad.angle = 45.0;
     foundGradient = true;
 ```
+
+**❌ Wrong Examples:**
+```glsl
+} else if(iColor == ivec3(123, 50, 168)) {
+    grad.colors[0] = hexToRgb(0x70d352);  // Lowercase hex
+    grad.colors[1] = hexToRgb(0xDFF3E0);
+    grad.colors[2] = hexToRgb(0x38A5E8);
+    grad.colorCount = 3;
+    grad.speed = 1000.0;
+    grad.angle = 45.0;
+    foundGradient = true;
+
+} else if(iColor == ivec3(123, 50, 168)) {
+    grad.colors[0] = hexToRgb(0x70D352);
+    grad.colors[1] = hexToRgb(0xDFF3E0);
+    grad.colors[2] = hexToRgb(0x38A5E8);
+    grad.colorCount = 4;  // Should be 3, not 4
+    grad.speed = 1000.0;
+    grad.angle = 45.0;
+    foundGradient = true;
+
+} else if(iColor == ivec3(123, 50, 168)) {
+    grad.colors[0] = hexToRgb(0x70D352);
+    grad.colors[1] = hexToRgb(0xDFF3E0);
+    // Missing grad.colors[2]
+    grad.colorCount = 3;
+    grad.speed = 1000.0;
+    grad.angle = 45.0;
+    foundGradient = true;
+```
+
+---
+
+## 🔍 Quick Reference
+
+### What Each Part Does
+
+| Part | File | Purpose |
+|------|------|---------|
+| `registerGradient()` | `.vsh` | Registers the gradient in memory |
+| `TEXT_EFFECT()` | `.glsl` | Applies gradient to text messages |
+| `else if(iColor)` | `.fsh` | Renders gradient on UI elements |
+
+### Color Values Must Match
+
+All three files must use the **exact same RGB values**:
+
+```
+Trigger Color: #7B32A8
+RGB: (123, 50, 168)
+
+✅ All three files use: 123, 50, 168
+❌ Don't mix: 123, 50, 168 in one file and 124, 50, 168 in another
+```
+
+### Hex Color Rules
+
+- Always use **uppercase**: `0x70D352` ✅
+- Never use **lowercase**: `0x70d352` ❌
+- Always use **8 characters**: `0x70D352` ✅
+- Never use **6 characters**: `0x70D35` ❌
 
 ---
 
