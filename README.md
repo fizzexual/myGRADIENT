@@ -8,83 +8,88 @@
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20+-green?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-red?style=flat-square)
 
-**A powerful shader system for smooth, animated color gradients on Minecraft text and UI elements**
+**Smooth, animated color gradients for Minecraft text and UI elements**
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Tools](#-tools)
+[Get Started](#-getting-started) • [How It Works](#-how-it-works) • [Create Gradients](#-creating-gradients)
 
 </div>
 
 ---
 
-## ✨ Features
+## ✨ What is This?
 
-- **Smooth Animations** - 3-color cycling gradients with 1-second cycles
-- **Universal Support** - Works on glyphs (UI) and text messages (chat/signs)
-- **Easy Creation** - Interactive web tool to generate gradient code
-- **Duplicate Detection** - Automatic warnings for shader conflicts
-- **Professional Quality** - Production-ready shader implementation
+This shader system adds **smooth, animated color gradients** to your Minecraft text. Instead of static colors, your text smoothly cycles through 3 colors in a beautiful animation.
 
----
-
-## 🚀 Quick Start
-
-### Using the Gradient Helper
-
-The easiest way to create new gradients is with the included `gradient_helper.html` tool:
-
-1. **Open** `gradient_helper.html` in your web browser
-2. **Select** your trigger color (the color code that activates the gradient)
-3. **Pick** 3 gradient colors using the color pickers
-4. **Click** "Generate Configs"
-5. **Copy** the generated code to the three required files
+Perfect for:
+- Custom resource packs
+- Server branding
+- UI customization
+- Chat effects
 
 ---
 
-## 📝 Creating Custom Gradients
+## 🚀 Getting Started
 
-When you create a new gradient, you **must** add code to all three files for it to work everywhere.
+### The Easy Way: Use the Gradient Helper
 
-### Architecture
+We've built a tool that does all the work for you:
 
-The gradient system is split across three shader files:
+1. Open `gradient_helper.html` in your browser
+2. Pick your colors (3 color pickers)
+3. Click "Generate"
+4. Copy the code to 3 files
 
-| File | Purpose | Target |
-|------|---------|--------|
-| `core/rendertype_text.vsh` | Gradient registration | Glyphs (Vertex Shader) |
-| `core/rendertype_text.fsh` | Gradient rendering | Glyphs (Fragment Shader) |
-| `include/text_effects_config.glsl` | Gradient application | Text Messages |
+That's it! Your gradient is ready.
 
-### Implementation Guide
+---
 
-#### Step 1: Register in Vertex Shader
+## 🎯 How It Works
+
+The system has **3 parts** that work together:
+
+```
+Your Color Code (#7B32A8)
+        ↓
+    ┌───┴───┐
+    ↓       ↓
+ Glyphs   Text Messages
+(UI)      (Chat/Signs)
+```
+
+- **Glyphs** (scoreboards, tabs, etc.) → Handled by shader files
+- **Text Messages** (chat, signs) → Handled by config file
+
+All three files must be updated for the gradient to work everywhere.
+
+---
+
+## 📝 Creating Your First Gradient
+
+### Step 1: Generate Code
+
+Open `gradient_helper.html` and:
+1. Choose a trigger color (e.g., `#7B32A8`)
+2. Pick 3 gradient colors
+3. Click "Generate Configs"
+
+You'll get 3 code blocks to copy.
+
+### Step 2: Add to Vertex Shader
 
 **File:** `core/rendertype_text.vsh`
 
-Add this line in the `initGradients()` function:
+Find the `initGradients()` function and add:
 
-```glsl
-registerGradient(0xTRIGGER, 0xCOLOR1, 0xCOLOR2, 0xCOLOR3, 1000.0, 45.0);
-```
-
-**Example:**
 ```glsl
 registerGradient(0x7B32A8, 0x70D352, 0xDFF3E0, 1000.0, 45.0);
 ```
 
-#### Step 2: Apply to Text Messages
+### Step 3: Add to Text Config
 
 **File:** `include/text_effects_config.glsl`
 
-Add this block in the switch statement:
+Find the switch statement and add:
 
-```glsl
-TEXT_EFFECT(R, G, B) { // #HEXCOLOR
-    apply_gradient_3(rgb(R1, G1, B1), rgb(R2, G2, B2), rgb(R3, G3, B3), 1.0);
-    textData.shouldScale = true;
-}
-```
-
-**Example:**
 ```glsl
 TEXT_EFFECT(123, 50, 168) { // #7B32A8
     apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
@@ -92,24 +97,12 @@ TEXT_EFFECT(123, 50, 168) { // #7B32A8
 }
 ```
 
-#### Step 3: Render for Glyphs
+### Step 4: Add to Fragment Shader
 
 **File:** `core/rendertype_text.fsh`
 
-Add this block in the main() function's if-else chain:
+Find the if-else chain and add:
 
-```glsl
-} else if(iColor == ivec3(R, G, B)) {
-    grad.colors[0] = hexToRgb(0xCOLOR1);
-    grad.colors[1] = hexToRgb(0xCOLOR2);
-    grad.colors[2] = hexToRgb(0xCOLOR3);
-    grad.colorCount = 3;
-    grad.speed = 1000.0;
-    grad.angle = 45.0;
-    foundGradient = true;
-```
-
-**Example:**
 ```glsl
 } else if(iColor == ivec3(123, 50, 168)) {
     grad.colors[0] = hexToRgb(0x70D352);
@@ -123,29 +116,43 @@ Add this block in the main() function's if-else chain:
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Understanding the Settings
 
-### Gradient Parameters
+Each gradient has these settings (all locked for consistency):
 
-- **Speed**: Animation cycle duration in milliseconds (default: 1000ms)
-- **Angle**: Gradient direction in degrees (default: 45°)
-- **Colors**: 3-color cycling animation
-
-### Color Format
-
-- **Trigger Color**: RGB hex code (e.g., `#7B32A8`)
-- **Gradient Colors**: RGB hex codes (e.g., `0x70D352`)
-- **Hex Format**: Always uppercase (e.g., `0x70D352` not `0x70d352`)
+| Setting | Value | What it does |
+|---------|-------|-------------|
+| **Speed** | 1000ms | How fast the colors cycle |
+| **Angle** | 45° | Direction of the gradient |
+| **Colors** | 3 colors | The colors that animate |
 
 ---
 
-## ⚠️ Important Notes
+## ⚠️ Important Rules
 
-- **All three files must be updated** for a gradient to work on both glyphs and text messages
-- **Trigger color must match exactly** across all three files (RGB values)
-- **Hex colors must be in uppercase** format
-- **Avoid duplicate case labels** - the helper tool will warn you if your color creates a collision
-- **Speed and angle are locked** to 1000ms and 45° for consistency
+✅ **DO:**
+- Use the gradient helper tool
+- Copy code exactly as shown
+- Update all 3 files
+- Use uppercase hex colors (`0x70D352`)
+
+❌ **DON'T:**
+- Mix up the RGB values
+- Use lowercase hex (`0x70d352`)
+- Skip any of the 3 files
+- Use the same color twice
+
+---
+
+## 🛠️ Tools
+
+### gradient_helper.html
+
+Your one-stop tool for creating gradients:
+- 🎨 Color pickers for easy selection
+- 📋 Auto-generates all code
+- ⚠️ Warns about duplicate colors
+- 📋 Copy-to-clipboard buttons
 
 ---
 
@@ -154,53 +161,44 @@ Add this block in the main() function's if-else chain:
 ```
 shaders/
 ├── core/
-│   ├── rendertype_text.vsh    # Vertex shader (glyphs)
-│   ├── rendertype_text.fsh    # Fragment shader (glyphs)
+│   ├── rendertype_text.vsh    ← Add gradient registration here
+│   ├── rendertype_text.fsh    ← Add gradient rendering here
 │   └── rendertype_text.json
 ├── include/
-│   ├── text_effects_config.glsl    # Text message effects
-│   ├── text_effects.glsl
-│   ├── spheya_packs.glsl
+│   ├── text_effects_config.glsl    ← Add gradient effects here
 │   └── ...
-├── gradient_helper.html        # Gradient generator tool
-└── how_to_use.md              # Documentation
+└── gradient_helper.html        ← Use this tool
 ```
 
 ---
 
-## 🛠️ Tools
+## 🤔 Troubleshooting
 
-### gradient_helper.html
+**Gradient not showing?**
+- Make sure you updated all 3 files
+- Check that RGB values match exactly
+- Verify hex colors are uppercase
 
-Interactive web tool for generating gradient code. Features:
-- Color picker for trigger and gradient colors
-- Automatic code generation for all three files
-- Duplicate detection to prevent shader errors
-- Copy-to-clipboard functionality
+**Shader error?**
+- The helper tool will warn you about duplicate colors
+- Try a slightly different color
+
+**Still stuck?**
+- Double-check the color values match across all files
+- Make sure you're using the exact format shown
 
 ---
 
 ## 📖 Technical Details
 
-- **Animation Type**: 3-color gradient cycling
-- **Cycle Duration**: 1000 milliseconds
-- **Gradient Direction**: 45-degree diagonal
-- **Supported Targets**: Glyphs + Text Messages
-- **Shader Version**: GLSL 150
-
----
-
-## 🤝 Contributing
-
-To add new gradients or improve the system:
-
-1. Use `gradient_helper.html` to generate code
-2. Test the gradient on both glyphs and text messages
-3. Ensure all three files are properly updated
-4. Verify no duplicate case labels are created
+- **Animation Type:** 3-color cycling
+- **Cycle Time:** 1 second
+- **Direction:** 45° diagonal
+- **Shader Version:** GLSL 150
+- **Minecraft:** 1.20+
 
 ---
 
 ## 📄 License
 
-This shader pack is provided as-is for use in Minecraft resource packs.
+MIT License - Use freely in your projects
