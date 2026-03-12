@@ -113,10 +113,28 @@ TEXT_EFFECT(R, G, B) { // #HEXCOLOR
 }
 ```
 
-**✅ Correct Example:**
+**✅ Correct Example (Basic):**
 ```glsl
 TEXT_EFFECT(123, 50, 168) { // #7B32A8
     apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
+    textData.shouldScale = true;
+}
+```
+
+**✅ Correct Example (With Gloss):**
+```glsl
+TEXT_EFFECT(224, 48, 9) { // #E03009
+    apply_gradient_3(rgb(201, 2, 56), rgb(96, 0, 38), rgb(255, 0, 0), 1.0);
+    apply_gloss_basic(0.55, 0.45);
+    textData.shouldScale = true;
+}
+```
+
+**✅ Correct Example (With Advanced Gloss):**
+```glsl
+TEXT_EFFECT(31, 122, 254) { // #1F7AFE
+    apply_gradient_3(rgb(0, 46, 253), rgb(86, 68, 252), rgb(10, 177, 255), 1.0);
+    apply_gloss(0.45, 0.35);
     textData.shouldScale = true;
 }
 ```
@@ -136,6 +154,181 @@ TEXT_EFFECT(123, 50, 168) { // #7B32A8
 TEXT_EFFECT(123, 50, 168) { // #7B32A8
     apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
     // Missing textData.shouldScale = true;
+}
+
+TEXT_EFFECT(123, 50, 168) { // #7B32A8
+    apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
+    apply_gloss_basic(1.5, 0.45);  // Speed too high (max 1.0)
+    textData.shouldScale = true;
+}
+```
+
+---
+
+## ✨ Optional Effects
+
+You can add extra effects to make your gradients even better:
+
+### `textData.shouldScale = true;`
+
+**What it does:** Makes the text slightly larger when the gradient is applied
+
+**When to use:** Always include this - it makes the gradient more visible
+
+**Example:**
+```glsl
+TEXT_EFFECT(123, 50, 168) { // #7B32A8
+    apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
+    textData.shouldScale = true;  // ← Makes text bigger
+}
+```
+
+---
+
+### `apply_gloss_basic(SPEED, INTENSITY);`
+
+**What it does:** Adds a shiny gloss effect that moves across the text
+
+**Parameters:**
+- **SPEED** (0.0 - 1.0): How fast the gloss moves (0.6 = medium)
+- **INTENSITY** (0.0 - 1.0): How bright the gloss is (0.45 = medium brightness)
+
+**When to use:** For a subtle shine effect on text
+
+**Examples:**
+
+✅ **Correct:**
+```glsl
+TEXT_EFFECT(224, 48, 9) { // #E03009
+    apply_gradient_3(rgb(201, 2, 56), rgb(96, 0, 38), rgb(255, 0, 0), 1.0);
+    apply_gloss_basic(0.55, 0.45);  // Medium speed, medium brightness
+    textData.shouldScale = true;
+}
+
+TEXT_EFFECT(191, 33, 34) { // #BF2122
+    apply_gradient_3(rgb(255, 50, 50), rgb(123, 255, 119), rgb(255, 50, 50), 1.0);
+    apply_gloss_basic(0.6, 0.45);   // Slightly faster gloss
+    textData.shouldScale = true;
+}
+```
+
+❌ **Wrong:**
+```glsl
+TEXT_EFFECT(224, 48, 9) { // #E03009
+    apply_gradient_3(rgb(201, 2, 56), rgb(96, 0, 38), rgb(255, 0, 0), 1.0);
+    apply_gloss_basic(1.5, 0.45);   // Speed too high (max 1.0)
+    textData.shouldScale = true;
+}
+
+TEXT_EFFECT(224, 48, 9) { // #E03009
+    apply_gradient_3(rgb(201, 2, 56), rgb(96, 0, 38), rgb(255, 0, 0), 1.0);
+    apply_gloss_basic(0.55, 1.5);   // Intensity too high (max 1.0)
+    textData.shouldScale = true;
+}
+```
+
+---
+
+### `apply_gloss(SPEED, INTENSITY);`
+
+**What it does:** Advanced gloss effect with more control (used for UI elements)
+
+**Parameters:**
+- **SPEED** (0.0 - 1.0): How fast the gloss moves (0.45 = medium)
+- **INTENSITY** (0.0 - 1.0): How bright the gloss is (0.35 = subtle)
+
+**When to use:** For a more refined, professional shine effect
+
+**Examples:**
+
+✅ **Correct:**
+```glsl
+TEXT_EFFECT(31, 122, 254) { // #1F7AFE
+    apply_gradient_3(rgb(0, 46, 253), rgb(86, 68, 252), rgb(10, 177, 255), 1.0);
+    apply_gloss(0.45, 0.35);  // Subtle, professional gloss
+    textData.shouldScale = true;
+}
+
+TEXT_EFFECT(255, 102, 102) { // #FF6666
+    apply_gradient_3(rgb(255, 99, 229), rgb(247, 0, 0), rgb(255, 153, 255), 1.0);
+    apply_gloss(0.45, 0.35);  // Same settings for consistency
+    textData.shouldScale = true;
+}
+```
+
+❌ **Wrong:**
+```glsl
+TEXT_EFFECT(31, 122, 254) { // #1F7AFE
+    apply_gradient_3(rgb(0, 46, 253), rgb(86, 68, 252), rgb(10, 177, 255), 1.0);
+    apply_gloss(0.45, 0.35);
+    // Missing textData.shouldScale = true;
+}
+
+TEXT_EFFECT(31, 122, 254) { // #1F7AFE
+    apply_gradient_3(rgb(0, 46, 253), rgb(86, 68, 252), rgb(10, 177, 255), 1.0);
+    apply_gloss(0.45);  // Missing intensity parameter
+    textData.shouldScale = true;
+}
+```
+
+---
+
+## 📊 Effect Comparison
+
+| Effect | Purpose | Speed Range | Intensity Range | Use Case |
+|--------|---------|-------------|-----------------|----------|
+| `apply_gradient_3()` | Color animation | N/A | N/A | Always use |
+| `apply_gloss_basic()` | Subtle shine | 0.0 - 1.0 | 0.0 - 1.0 | Text messages |
+| `apply_gloss()` | Professional shine | 0.0 - 1.0 | 0.0 - 1.0 | UI elements |
+| `textData.shouldScale` | Make text bigger | N/A | N/A | Always use |
+
+---
+
+## 🎨 Complete Examples
+
+### Example 1: Simple Gradient (No Effects)
+```glsl
+TEXT_EFFECT(123, 50, 168) { // #7B32A8
+    apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
+    textData.shouldScale = true;
+}
+```
+
+### Example 2: Gradient + Basic Gloss
+```glsl
+TEXT_EFFECT(224, 48, 9) { // #E03009
+    apply_gradient_3(rgb(201, 2, 56), rgb(96, 0, 38), rgb(255, 0, 0), 1.0);
+    apply_gloss_basic(0.6, 0.45);
+    textData.shouldScale = true;
+}
+```
+
+### Example 3: Gradient + Advanced Gloss
+```glsl
+TEXT_EFFECT(31, 122, 254) { // #1F7AFE
+    apply_gradient_3(rgb(0, 46, 253), rgb(86, 68, 252), rgb(10, 177, 255), 1.0);
+    apply_gloss(0.45, 0.35);
+    textData.shouldScale = true;
+}
+```
+
+### Example 4: Multiple Gradients with Different Effects
+```glsl
+TEXT_EFFECT(123, 50, 168) { // #7B32A8
+    apply_gradient_3(rgb(112, 211, 82), rgb(223, 243, 224), rgb(56, 165, 232), 1.0);
+    textData.shouldScale = true;
+}
+
+TEXT_EFFECT(224, 48, 9) { // #E03009
+    apply_gradient_3(rgb(201, 2, 56), rgb(96, 0, 38), rgb(255, 0, 0), 1.0);
+    apply_gloss_basic(0.55, 0.45);
+    textData.shouldScale = true;
+}
+
+TEXT_EFFECT(31, 122, 254) { // #1F7AFE
+    apply_gradient_3(rgb(0, 46, 253), rgb(86, 68, 252), rgb(10, 177, 255), 1.0);
+    apply_gloss(0.45, 0.35);
+    textData.shouldScale = true;
 }
 ```
 
