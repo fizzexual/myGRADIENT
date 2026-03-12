@@ -2,7 +2,9 @@
 
 <div align="center">
 
-![Gradient Animation](https://img.shields.io/badge/Shader-GLSL%20150-blue?style=flat-square)
+![Gradient Animation](https://file.garden/abM-TiHSwTHZbAzx/myGRADIENT-3-13-2026.gif)
+
+![Shader](https://img.shields.io/badge/Shader-GLSL%20150-blue?style=flat-square)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20+-green?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-red?style=flat-square)
 
