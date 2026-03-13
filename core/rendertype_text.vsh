@@ -133,8 +133,8 @@ float getAngleFactor(vec3 pos, float angle) {
 void initGradients() {
     registerGradient(0xE03009,0xC90238,0x600026,1000.0,45.0); // Red/Orange
     registerGradient(0xBE1AF5,0x6600A1,0x9C23FF,1000.0,45.0); // Purple/Pink
-    registerGradient(0x1F7AFE,0x002EFD,0x5644FC,1000.0,45.0); // Blue
-    registerGradient(0X86C222,0x2D3640,0x1A9BFA,0x01CF38,5000.0,90.0);
+    registerGradient(0x1F7AFE,0x002EFD,0x5644FC,1000.0,45.0); // Blue}
+    registerGradient(0X1B3D21,0x0DF211,0x9BFF05,0x00FF2A,1000.0,45.0);
 }
 
 void main() {

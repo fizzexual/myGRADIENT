@@ -28,6 +28,8 @@ struct Gradient {
     int colorCount;
     float speed;
     float angle;
+    float glossSpeed;
+    float glossIntensity;
 };
 
 vec3 hexToRgb(int hex) {
@@ -71,6 +73,16 @@ vec4 getGradientColor(Gradient grad, float t) {
     }
 }
 
+vec4 applyGlossToGradient(Gradient grad, vec4 gradColor) {
+    vec2 pos = gl_FragCoord.xy / 100.0;
+    float f = pos.x + pos.y - GameTime * 6400.0 * grad.glossSpeed;
+    
+    if(mod(f, 5.0) < 0.5) {
+        return mix(gradColor, vec4(1.0, 1.0, 1.0, 1.0), grad.glossIntensity);
+    }
+    return gradColor;
+}
+
 void main() {
     if(applySpheyaPacks()) return;
 
@@ -85,13 +97,7 @@ void main() {
     Gradient grad;
     bool foundGradient = false;
     
-    if(iColor == ivec3(230,255,254)) {
-        grad.trigger = ivec3(230,255,254);
-        grad.colorCount = 2;
-        grad.speed = 1000.0;
-        grad.angle = 0.0;
-        foundGradient = true;
-    } else if(iColor == ivec3(224,48,9)) {
+    if(iColor == ivec3(224,48,9)) {
         grad.trigger = ivec3(224,48,9);
         grad.colors[0] = hexToRgb(0x920000);
         grad.colors[1] = hexToRgb(0xFF0000);
@@ -99,6 +105,8 @@ void main() {
         grad.colorCount = 3;
         grad.speed = 5000.0;
         grad.angle = 45.0;
+        grad.glossSpeed = 0.55;
+        grad.glossIntensity = 0.45;
         foundGradient = true;
     } else if(iColor == ivec3(31,122,254)) {
         grad.colors[0] = hexToRgb(0x002EFD);
@@ -107,6 +115,8 @@ void main() {
         grad.colorCount = 3;
         grad.speed = 5000.0;
         grad.angle = 45.0;
+        grad.glossSpeed = 0.45;
+        grad.glossIntensity = 0.35;
         foundGradient = true;
     } else if(iColor == ivec3(190,26,245)) {
         grad.colors[0] = hexToRgb(0x6600A1);
@@ -115,54 +125,23 @@ void main() {
         grad.colorCount = 3;
         grad.speed = 5000.0;
         grad.angle = 45.0;
+        grad.glossSpeed = 0.55;
+        grad.glossIntensity = 0.45;
         foundGradient = true;
-    } else if(iColor == ivec3(190,26,249)) {
-        grad.colors[0] = hexToRgb(0x6600A1);
-        grad.colors[1] = hexToRgb(0x9C23FF);
-        grad.colors[2] = hexToRgb(0xE00AF3);
+    } else if(iColor == ivec3(27,61,33)) {
+        grad.colors[0] = hexToRgb(0x0DF211);
+        grad.colors[1] = hexToRgb(0x9BFF05);
+        grad.colors[2] = hexToRgb(0x00FF2A);
         grad.colorCount = 3;
         grad.speed = 5000.0;
         grad.angle = 45.0;
         foundGradient = true;
-    } else if(iColor == ivec3(191,33,34)) {
-        grad.colors[0] = hexToRgb(0xFF3232);
-        grad.colors[1] = hexToRgb(0x7BFF77);
-        grad.colors[2] = hexToRgb(0xFF3232);
-        grad.colors[3] = hexToRgb(0x7BFF77);
-        grad.colorCount = 4;
-        grad.speed = 0.6;
-        grad.angle = 45.0;
-        foundGradient = true;
-    } else if(iColor == ivec3(191,33,39)) {
-        grad.colors[0] = hexToRgb(0xFF3232);
-        grad.colors[1] = hexToRgb(0x7BFF77);
-        grad.colors[2] = hexToRgb(0xFF3232);
-        grad.colors[3] = hexToRgb(0x7BFF77);
-        grad.colorCount = 4;
-        grad.speed = 0.6;
-        grad.angle = 45.0;
-        foundGradient = true;
-    } else if(iColor == ivec3(123,50,168)) {
-        grad.colors[0] = hexToRgb(0x70D352);
-        grad.colors[1] = hexToRgb(0xDFF3E0);
-        grad.colors[2] = hexToRgb(0x38A5E8);
-        grad.colorCount = 3;
-        grad.speed = 1000.0;
-        grad.angle = 45.0;
-        foundGradient = true;
-    } else if(iColor == ivec3(134,194,34)) {
-            grad.colors[0] = hexToRgb(0x2D3640);
-            grad.colors[1] = hexToRgb(0x1A9BFA);
-            grad.colors[2] = hexToRgb(0x01CF38);
-            grad.colorCount = 3;
-            grad.speed = 5000.0;
-            grad.angle = 90.0;
-            foundGradient = true;
     }
-    
+
     if(foundGradient) {
         float angleFactor = getAngleFactor(gl_FragCoord.xy * 0.01, grad.angle);
         vec4 gradColor = getGradientColor(grad, angleFactor);
+        gradColor = applyGlossToGradient(grad, gradColor);
         color = texture(Sampler0, texCoord0) * gradColor * ColorModulator;
     }
 

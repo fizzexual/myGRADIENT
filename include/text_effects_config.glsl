@@ -1,5 +1,6 @@
 #define TEXT_EFFECT(r, g, b) return true; case ((uint(r/4) << 16) | (uint(g/4) << 8) | (uint(b/4))):
 
+
 TEXT_EFFECT(224, 48, 9) { // Red/Orange (#E03009)
     apply_gradient_3(rgb(201, 2, 56), rgb(96, 0, 38), rgb(224, 48, 9), 1.0);
     textData.shouldScale = true;
@@ -17,8 +18,7 @@ TEXT_EFFECT(31, 122, 254) { // Blue (#1F7AFE)
     apply_gloss(0.45, 0.35);
 }
 
-TEXT_EFFECT(134, 194, 34) { // #86C222
-    apply_gradient_3(rgb(45, 54, 64), rgb(26, 155, 250), rgb(1, 207, 56), 5.0);
+TEXT_EFFECT(27, 61, 33) { // #1B3D21
+    apply_gradient_3(rgb(13, 242, 17), rgb(155, 255, 5), rgb(0, 255, 42), 1.0);
     textData.shouldScale = true;
-    apply_gloss(0.45, 0.35);
 }
