@@ -1,0 +1,18 @@
+{
+  "pack": {
+    "description": "myGRADIENT",
+    "min_format": 75,
+    "max_format": 199
+  },
+  "overlays": {
+    "entries": [
+      { "formats": [41, 76],  "directory": "1_21_2",          "min_format": 41,  "max_format": 76  },
+      { "formats": [64, 68],  "directory": "1_21_7",          "min_format": 64,  "max_format": 68  },
+      { "formats": [69, 76],  "directory": "1_21_9",          "min_format": 69,  "max_format": 76  },
+      { "formats": [57, 999], "directory": "1_21_11",         "min_format": 57,  "max_format": 999 }
+    ]
+  },
+  "sodium": {
+    "ignored_shaders": []
+  }
+}
