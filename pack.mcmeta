@@ -10,7 +10,7 @@
     "overlays": {
         "entries": [
             {
-                "directory": "1_21_2",
+                "directory": "overlay_1_21_2",
                 "formats": [
                     42,
                     999
