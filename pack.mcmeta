@@ -1,0 +1,28 @@
+{
+    "pack": {
+        "pack_format": 22,
+        "supported_formats": {
+            "min_inclusive": 22,
+            "max_inclusive": 64
+        },
+        "description": "colors"
+    },
+    "overlays": {
+        "entries": [
+            {
+                "directory": "1_21_2",
+                "formats": [
+                    42,
+                    999
+                ]
+            },
+            {
+                "directory": "1_21_11",
+                "formats": [
+                    57,
+                    999
+                ]
+            }
+        ]
+    }
+}
