@@ -4,10 +4,13 @@
 
 ![Gradient Animation](https://file.garden/abM-TiHSwTHZbAzx/myGRADIENT-3-13-2026.gif)
 
-![Minecraft](https://img.shields.io/badge/Minecraft-1.20+-green?style=flat-square)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4--1.21.11-green?style=flat-square)
+![Nexo](https://img.shields.io/badge/Nexo-1.20-blue?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-red?style=flat-square)
 
 **Adds smooth, animated color gradients to Minecraft text and UI elements**
+
+> ⚠️ **Currently only working with Nexo 1.20**. Tested Minecraft versions: **1.21.4 – 1.21.11**
 
 </div>
 
@@ -31,6 +34,19 @@ You need a text editor to edit the shader files. Any of these work:
 ---
 
 ## How to install the pack
+
+### For Nexo servers
+
+1. Download the pack as a folder (or extract the `.zip`)
+2. Navigate to your Nexo server directory: `\plugins\Nexo\pack\external_packs\`
+3. Place the `myGRADIENT` folder there
+4. Open `plugins/Nexo/settings.yml` and set:
+   ```yaml
+   generate_gif_shaders: false
+   ```
+5. Restart your server
+
+### For vanilla Minecraft
 
 1. Download the pack as a `.zip` file
 2. Open Minecraft
@@ -72,6 +88,28 @@ You can convert between them at [rgbcolorpicker.com](https://rgbcolorpicker.com/
 
 > ⚠️ Write down both formats for all 4 colors before you start editing. Mixing them up is the most common mistake.
 
+### Color Template
+
+Fill this out before editing any files:
+
+```
+Trigger Color:
+  Hex: #______
+  RGB: ___, ___, ___
+
+Gradient Color 1:
+  Hex: #______
+  RGB: ___, ___, ___
+
+Gradient Color 2:
+  Hex: #______
+  RGB: ___, ___, ___
+
+Gradient Color 3:
+  Hex: #______
+  RGB: ___, ___, ___
+```
+
 ---
 
 ## Step 2 — Edit the vertex shader (.vsh)
@@ -90,6 +128,14 @@ Example with real colors:
 ```
 registerGradient(0x7B32A8, 0x70D352, 0xDFF3E0, 0x38A5E8, 1000.0, 45.0);
 ```
+
+### Template for this step
+
+```
+registerGradient(0x______, 0x______, 0x______, 0x______, 1000.0, 45.0);
+```
+
+Fill in the blanks with your hex values (uppercase, no `#`).
 
 ### Common mistakes in this file
 
@@ -265,6 +311,13 @@ assets/minecraft/shaders/
 │   ├── text_effects_config.glsl   ← Step 3: configure your gradient
 │   └── ...                        ← don't touch these
 ```
+
+---
+
+## Planned Updates
+
+- **Web-Based Editor** — Edit gradients directly in your browser without touching shader files
+- **Effects** — Additional visual effects and animations for text
 
 ---
 
