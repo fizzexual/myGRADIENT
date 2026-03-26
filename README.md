@@ -129,14 +129,6 @@ Example with real colors:
 registerGradient(0x7B32A8, 0x70D352, 0xDFF3E0, 0x38A5E8, 1000.0, 45.0);
 ```
 
-### Template for this step
-
-```
-registerGradient(0x______, 0x______, 0x______, 0x______, 1000.0, 45.0);
-```
-
-Fill in the blanks with your hex values (uppercase, no `#`).
-
 ### Common mistakes in this file
 
 | Mistake | Wrong | Correct |
@@ -153,16 +145,7 @@ Fill in the blanks with your hex values (uppercase, no `#`).
 
 Open: `assets/minecraft/shaders/include/text_effects_config.glsl`
 
-Find the section with other `TEXT_EFFECT(...)` blocks and add yours in the same area. Use this format:
-
-```
-TEXT_EFFECT(R, G, B) { // #HEXCOLOR
-    apply_gradient_3(rgb(R1, G1, B1), rgb(R2, G2, B2), rgb(R3, G3, B3), 1.0);
-    textData.shouldScale = true;
-}
-```
-
-Replace `R, G, B` with the RGB values of your trigger color, and `R1 G1 B1` etc. with the RGB values of your 3 gradient colors.
+Find the section with other `TEXT_EFFECT(...)` blocks and add yours in the same area.
 
 Example:
 ```
@@ -203,18 +186,7 @@ The two numbers are `speed` and `brightness`, both between `0.0` and `1.0`.
 
 Open: `assets/minecraft/shaders/core/rendertype_text.fsh`
 
-Find the section with other `else if(iColor == ...)` blocks and add yours. Use this format:
-
-```
-} else if(iColor == ivec3(R, G, B)) {
-    grad.colors[0] = hexToRgb(0xCOLOR1);
-    grad.colors[1] = hexToRgb(0xCOLOR2);
-    grad.colors[2] = hexToRgb(0xCOLOR3);
-    grad.colorCount = 3;
-    grad.speed = 1000.0;
-    grad.angle = 45.0;
-    foundGradient = true;
-```
+Find the section with other `else if(iColor == ...)` blocks and add yours.
 
 Example:
 ```
@@ -236,6 +208,40 @@ Example:
 | Wrong color count | `grad.colorCount = 4` | always `grad.colorCount = 3` |
 | Missing a color line | only 2 `grad.colors[...]` lines | always include all 3: `[0]`, `[1]`, `[2]` |
 | Missing `foundGradient = true` | forgot the last line | always include it |
+
+---
+
+## Templates
+
+Copy and paste these templates, then fill in the blanks with your colors.
+
+### Vertex Shader (.vsh) Template
+
+```
+registerGradient(0x______, 0x______, 0x______, 0x______, 1000.0, 45.0);
+```
+
+### Config File (.glsl) Template
+
+```
+TEXT_EFFECT(___, ___, ___) { // #______
+    apply_gradient_3(rgb(___, ___, ___), rgb(___, ___, ___), rgb(___, ___, ___), 1.0);
+    textData.shouldScale = true;
+}
+```
+
+### Fragment Shader (.fsh) Template
+
+```
+} else if(iColor == ivec3(___, ___, ___)) {
+    grad.colors[0] = hexToRgb(0x______);
+    grad.colors[1] = hexToRgb(0x______);
+    grad.colors[2] = hexToRgb(0x______);
+    grad.colorCount = 3;
+    grad.speed = 1000.0;
+    grad.angle = 45.0;
+    foundGradient = true;
+```
 
 ---
 
