@@ -217,11 +217,15 @@ Copy and paste these templates, then fill in the blanks with your colors.
 
 ### Vertex Shader (.vsh) Template
 
+**File:** `assets/minecraft/shaders/core/rendertype_text.vsh`
+
 ```
 registerGradient(0x______, 0x______, 0x______, 0x______, 1000.0, 45.0);
 ```
 
 ### Config File (.glsl) Template
+
+**File:** `assets/minecraft/shaders/include/text_effects_config.glsl`
 
 ```
 TEXT_EFFECT(___, ___, ___) { // #______
@@ -231,6 +235,8 @@ TEXT_EFFECT(___, ___, ___) { // #______
 ```
 
 ### Fragment Shader (.fsh) Template
+
+**File:** `assets/minecraft/shaders/core/rendertype_text.fsh`
 
 ```
 } else if(iColor == ivec3(___, ___, ___)) {
