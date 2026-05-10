@@ -333,6 +333,10 @@ assets/minecraft/shaders/
 
 ---
 
+## Showcase
+
+https://www.reddit.com/r/Minecraft/comments/1rzbcpv/
+
 ## License
 
 MIT — free to use in your own resource packs and projects.
