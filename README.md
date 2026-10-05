@@ -1,4 +1,4 @@
-# 🎨 Animated Text Gradients
+# 🎨 Animated Text Gradients 🍂
 
 <div align="center">
 
@@ -13,6 +13,12 @@
 > ⚠️ **Currently only working with Nexo 1.20**. Tested Minecraft versions: **1.21.4 – 1.21.11**
 
 </div>
+
+---
+
+## About
+
+A Minecraft resource pack for server owners and pack makers who want animated gradient text (ranks, titles, chat tags) without a client mod. It builds on Spheya's text-effects core-shader includes: each gradient is tied to a trigger text color and defined by hand in three shader files. It works today with Nexo 1.20 on Minecraft 1.21.4–1.21.11; the browser-based gradient editor listed under Planned Updates is not built yet.
 
 ---
 
